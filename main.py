@@ -1,15 +1,37 @@
+import random
 from newspaper import Article
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+
+from flask import Flask, request, jsonify, render_template
+
+app = Flask(__name__)
 
 
-urls = ['https://timesofmalta.com/article/km-malta-airlines-drops-maltese-requirement-due-80-passengers-foreign.1090251',
-        'https://www.maltatoday.com.mt/news/national/128415/revealed_transport_malta_officials_at_centre_of_maritime_fines_corruption_racket_',
-        'https://www.independent.com.mt/articles/2024-03-31/local-news/A-look-back-Air-Malta-shuts-down-after-years-of-turbulence-6736259853',
-        'https://lovinmalta.com/opinion/survey/survey-do-you-think-maltas-party-owned-tv-stations-should-be-shut-down/']
+@app.route("/")
+def hello_world():
+    return render_template("index.html")
 
-for url in urls:
+
+@app.route("/analyze", methods=["POST"])
+def analyze():
+    url = request.json["url"]
     article = Article(url)
     article.download()
     article.parse()
-    print(article.title)
-    print(article.text)
-    print('-------------------')
+    text = article.text
+    sid = SentimentIntensityAnalyzer()
+    sentiment = sid.polarity_scores(text)
+    analysis = {
+        "title": article.title,
+        "sentiment": (
+            "positive"
+            if sentiment["compound"] > 0
+            else "negative" if sentiment["compound"] < 0 else "neutral"
+        ),
+        "score": sentiment["compound"],
+    }
+    return jsonify(analysis)
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
