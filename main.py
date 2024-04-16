@@ -1,10 +1,14 @@
-import random
-from newspaper import Article
+from newspaper import Article, Config
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 from flask import Flask, request, jsonify, render_template
 
 app = Flask(__name__)
+user_agent = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0"
+)
+config = Config()
+config.browser_user_agent = user_agent
 
 
 @app.route("/")
