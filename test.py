@@ -1,6 +1,14 @@
 from newspaper import Article, Config
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from sklearn.feature_extraction.text import TfidfVectorizer
+from wordcloud import WordCloud
 
-user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0'
+vectorizer = TfidfVectorizer()
+english_stopwords = set(stopwords.words("english"))
+user_agent = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0"
+)
 urls = [
     "https://www.timesofmalta.com/article/km-malta-airlines-drops-maltese-requirement-due-80-passengers-foreign.1090251",
     "https://www.maltatoday.com.mt/news/national/128415/revealed_transport_malta_officials_at_centre_of_maritime_fines_corruption_racket_",
@@ -14,14 +22,23 @@ config = Config()
 config.browser_user_agent = user_agent
 config.request_timeout = 10
 
-for url in urls:
-    article = Article(url, config=config)
-    article.download()
-    article.parse()
-    text = article.text
-    title = article.title
-    print(title)
-    print("/\/\/\/\ ")
-    print(text)
-    print("--------------------------------------------------")
+url = urls[0]
+
+article = Article(url, config=config)
+article.download()
+article.parse()
+text = article.text
+
+words = word_tokenize(text)
+
+words = [word for word in words if word.lower() not in english_stopwords]
+
+X = vectorizer.fit_transform(words)
+
+
+wordcloud = WordCloud(width=800, height=400).generate_from_frequencies(
+    dict(zip(vectorizer.get_feature_names_out(), X.sum(axis=0).A1))
+)
+
+wordcloud.to_file("wordcloudtwo.png")
 

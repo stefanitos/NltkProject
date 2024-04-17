@@ -1,0 +1,65 @@
+html {
+  font-size: 20px;
+}
+
+.round-right {
+  border-radius: 0 20px 20px 0;
+}
+
+.main-div {
+  margin-top: 2rem;
+  width: 50%;
+  height: max-content;
+  background-color: white;
+  border-radius: 1.2rem;
+  box-shadow: 10px 10px 20px rgb(20, 20, 20);
+  padding: 2rem;
+  margin-bottom: 40px;
+}
+
+.url-input {
+  width: 80%;
+}
+
+#btn-submit {
+  margin-top: 1rem;
+  cursor: pointer;
+  width: 100%;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.result-container {
+  display: none;
+  width: 50%;
+  height: max-content;
+  background-color: white;
+  border-radius: 1.2rem;
+  box-shadow: 10px 10px 20px rgb(20, 20, 20);
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+@keyframes fadeInSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-result {
+  animation: fadeInSlideUp 0.5s ease-out forwards;
+}
+
+.article-selection {
+  margin-top: 1rem;
+}
