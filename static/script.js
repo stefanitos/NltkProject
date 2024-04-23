@@ -79,10 +79,8 @@ window.onload = function () {
     gauge.set(data.score * 1000);
     const percentage = (data.score * 100).toFixed(2);
     sentimentResult.innerHTML = `${percentage}% is ${data.sentiment}`;
-    document.getElementById(
-      "word-cloud"
-    ).src = `data:image/png;base64,${data.wordcloud}`;
-  }
+    document.getElementById("word-cloud").src = data.wordcloud;
+}
 
   function populateArticleList() {
     fetch("/static/analysis.json")
