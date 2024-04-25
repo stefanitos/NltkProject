@@ -15,42 +15,51 @@ window.onload = function () {
     highDpiSupport: true,
   };
 
-  let article_list = [];
+  const resultContainer = document.querySelector(".result-container");
+  const submitButton = document.getElementById("btn-submit");
+  const articleList = document.getElementById("article-list");
+  const sentimentResult = document.getElementById("sentiment-result");
+  const urlInput = document.getElementById("val-url");
+  const wordCloudImage = document.getElementById("word-cloud");
+
+  let articleListData = [];
+  const analysisUrl = "/analyze";
+  const analysisDataUrl = "/static/analysis.json";
 
   populateArticleList();
 
-  document.getElementById("btn-submit").addEventListener("click", function () {
-    displayResult("val-url", "/analyze");
+  submitButton.addEventListener("click", async () => {
+    await displayResult();
     populateArticleList();
   });
 
-  document
-    .getElementById("article-list")
-    .addEventListener("change", function () {
-      displayResult("article-list");
-    });
+  articleList.addEventListener("change", displayArticleResult);
 
-  function displayResult(inputId, fetchUrl) {
-    const resultContainer = document.querySelector(".result-container");
+  async function displayResult() {
     resultContainer.style.display = "block";
     resultContainer.classList.add("animate-result");
 
     const target = document.getElementById("sentiment-gauge");
     const gauge = createGauge(target, opts);
-    const sentimentResult = document.getElementById("sentiment-result");
-    const url = document.getElementById(inputId).value;
+    const url = urlInput.value;
 
-    if (fetchUrl) {
-      fetchData(fetchUrl, { url }).then((data) =>
-        updateUI(data, gauge, sentimentResult)
-      );
-    } else {
-      const article = article_list.find(
-        (article) => article.article_url === url
-      );
-      updateUI(article, gauge, sentimentResult);
-      document.getElementById("val-url").value = url;
-    }
+    const data = await fetchData(analysisUrl, { url });
+    updateUI(data, gauge, sentimentResult);
+  }
+
+  function displayArticleResult() {
+    resultContainer.style.display = "block";
+    resultContainer.classList.add("animate-result");
+
+    const target = document.getElementById("sentiment-gauge");
+    const gauge = createGauge(target, opts);
+    const url = articleList.value;
+
+    const article = articleListData.find(
+      (article) => article.article_url === url
+    );
+    updateUI(article, gauge, sentimentResult);
+    urlInput.value = url;
   }
 
   function createGauge(target, options) {
@@ -73,36 +82,30 @@ window.onload = function () {
   }
 
   function updateUI(data, gauge, sentimentResult) {
-    data.score = data.score < 0 ? data.score * -1 : data.score;
-    gauge.set(data.score * 1000);
-    const percentage = (data.score * 100).toFixed(2);
-    sentimentResult.innerHTML = `${percentage}% is ${data.sentiment}`;
-    document.getElementById("word-cloud").src = data.wordcloud;
-}
+    const score = Math.abs(data.score);
+    gauge.set(score * 1000);
+    const percentage = (score * 100).toFixed(2);
+    sentimentResult.textContent = `${percentage}% is ${data.sentiment}`;
+    wordCloudImage.src = data.wordcloud;
+  }
 
-  function populateArticleList() {
-    fetch("/static/analysis.json")
-      .then((response) => response.json())
-      .then((data) => {
-        article_list = data;
-        const articleList = document.getElementById("article-list");
-        const emptyOption = document.createElement("option");
-        emptyOption.value = "";
-        emptyOption.textContent = "Select an article...";
-        articleList.appendChild(emptyOption);
+  async function populateArticleList() {
+    const response = await fetch(analysisDataUrl);
+    const data = await response.json();
+    articleListData = data;
 
-        const articleUrls = new Set();
+    articleList.innerHTML = `<option value="">Select an article...</option>`;
+    const articleUrls = new Set();
 
-        for (const article of data) {
-          if (!articleUrls.has(article.article_url)) {
-            const option = document.createElement("option");
-            option.value = article.article_url;
-            option.textContent = article.title;
-            articleList.appendChild(option);
+    for (const article of data) {
+      if (!articleUrls.has(article.article_url)) {
+        const option = document.createElement("option");
+        option.value = article.article_url;
+        option.textContent = article.title;
+        articleList.appendChild(option);
 
-            articleUrls.add(article.article_url);
-          }
-        }
-      });
+        articleUrls.add(article.article_url);
+      }
+    }
   }
 };

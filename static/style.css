@@ -63,3 +63,9 @@ html {
 .article-selection {
   margin-top: 1rem;
 }
+
+img {
+  width: 100%;
+  border-bottom-right-radius: 1.2rem;
+  border-bottom-left-radius: 1.2rem;
+}

@@ -69,7 +69,6 @@ def generate_wordcloud(text, title=None):
     """Generates a wordcloud from the given text and saves it to a file."""
     vectorizer = TfidfVectorizer()
     english_stopwords = set(stopwords.words("english"))
-    print(english_stopwords)
     words = word_tokenize(text)
     words = [word for word in words if word.lower() not in english_stopwords]
     X = vectorizer.fit_transform(words)
