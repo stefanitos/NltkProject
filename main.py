@@ -7,9 +7,6 @@ from wordcloud import WordCloud
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from flask import Flask, request, jsonify, render_template
 import json
-import matplotlib
-
-matplotlib.use("agg")
 
 app = Flask(__name__)
 user_agent = (
@@ -84,7 +81,7 @@ def generate_wordcloud(text, title=None):
     if not os.path.exists(wordcloud_dir):
         os.makedirs(wordcloud_dir)
 
-    # Using the title as the filename
+    # Using the hashed title as the filename
     filename = f"{hash(title)}-wordcloud.png"
     filepath = os.path.join(wordcloud_dir, filename)
     wordcloud.to_file(filepath)

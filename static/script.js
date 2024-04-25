@@ -10,10 +10,8 @@ window.onload = function () {
     },
     limitMax: false,
     limitMin: false,
-    colorStart: "#6F6EA0",
-    colorStop: "#C0C0DB",
+    colorStart: "#157347",
     strokeColor: "#EEEEEE",
-    generateGradient: true,
     highDpiSupport: true,
   };
 
