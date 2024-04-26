@@ -36,14 +36,13 @@ window.onload = function () {
   articleList.addEventListener("change", displayArticleResult);
 
   async function displayResult() {
+    const url = urlInput.value;
+    const data = await fetchData(analysisUrl, { url });
     resultContainer.style.display = "block";
     resultContainer.classList.add("animate-result");
 
     const target = document.getElementById("sentiment-gauge");
     const gauge = createGauge(target, opts);
-    const url = urlInput.value;
-
-    const data = await fetchData(analysisUrl, { url });
     updateUI(data, gauge, sentimentResult);
   }
 
