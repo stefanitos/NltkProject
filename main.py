@@ -32,18 +32,18 @@ def analyze():
     title = article.title
     sid = SentimentIntensityAnalyzer()
     sentiment = sid.polarity_scores(text)
-    plot_url = generate_wordcloud(text, title)
+    wordcloud_url = generate_wordcloud(text, title)
 
     analysis_file_path = os.path.join("static", "analysis.json")
     analysis = {
         "title": title,
         "sentiment": (
-            "positive"
-            if sentiment["compound"] > 0
-            else "negative" if sentiment["compound"] < 0 else "neutral"
+            "positive" if sentiment["compound"] > 0
+            else "negative" if sentiment["compound"] < 0
+            else "neutral"
         ),
         "score": sentiment["compound"],
-        "wordcloud": plot_url,
+        "wordcloud": wordcloud_url,
         "article_url": url,
     }
 
@@ -66,9 +66,9 @@ def get_analysis():
 
 
 def generate_wordcloud(text, title=None):
-    """Generates a wordcloud from the given text and saves it to a file."""
+    """Generates a wordcloud of the most common words in the text. Returns the URL of the generated wordcloud image."""
     vectorizer = TfidfVectorizer()
-    english_stopwords = set(stopwords.words("english"))
+    english_stopwords = stopwords.words("english")
     words = word_tokenize(text)
     words = [word for word in words if word.lower() not in english_stopwords]
     X = vectorizer.fit_transform(words)

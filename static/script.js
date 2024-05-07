@@ -70,14 +70,15 @@ window.onload = function () {
     return gauge;
   }
 
-  function fetchData(url, body) {
-    return fetch(url, {
+  async function fetchData(url, body) {
+    const response = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(body),
-    }).then((response) => response.json());
+    });
+    return await response.json();
   }
 
   function updateUI(data, gauge, sentimentResult) {
