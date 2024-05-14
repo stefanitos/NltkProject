@@ -1,5 +1,5 @@
 import os
-from newspaper import Article, Config
+from newspaper import Article, Config, ArticleException
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -26,8 +26,12 @@ def hello_world():
 def analyze():
     url = request.json["url"]
     article = Article(url, config=config)
-    article.download()
-    article.parse()
+    try:
+        article.download()
+        article.parse()
+    except ArticleException:
+        return "errrrm"
+
     text = article.text
     title = article.title
     sid = SentimentIntensityAnalyzer()
@@ -38,14 +42,15 @@ def analyze():
     analysis = {
         "title": title,
         "sentiment": (
-            "positive" if sentiment["compound"] > 0
-            else "negative" if sentiment["compound"] < 0
-            else "neutral"
+            "positive"
+            if sentiment["compound"] > 0
+            else "negative" if sentiment["compound"] < 0 else "neutral"
         ),
         "score": sentiment["compound"],
         "wordcloud": wordcloud_url,
         "article_url": url,
     }
+    print(analysis)
 
     existing_analyses = get_analysis()
     existing_analyses.append(analysis)
@@ -65,15 +70,19 @@ def get_analysis():
         return []
 
 
-def generate_wordcloud(text, title=None):
-    """Generates a wordcloud of the most common words in the text. Returns the URL of the generated wordcloud image."""
+def vectorize_text(text):
     vectorizer = TfidfVectorizer()
     english_stopwords = stopwords.words("english")
     words = word_tokenize(text)
     words = [word for word in words if word.lower() not in english_stopwords]
     X = vectorizer.fit_transform(words)
+    return dict(zip(vectorizer.get_feature_names_out(), X.sum(axis=0).A1))
+
+
+def generate_wordcloud(text, title=None):
+    """Generates a wordcloud of the most common words in the text. Returns the URL of the generated wordcloud image."""
     wordcloud = WordCloud(width=800, height=400).generate_from_frequencies(
-        dict(zip(vectorizer.get_feature_names_out(), X.sum(axis=0).A1))
+        vectorize_text(text)
     )
 
     wordcloud_dir = "static/wordclouds"

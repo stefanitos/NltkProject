@@ -1,1 +1,44 @@
-[{"title": "Aww, cute: new London show explores the world of the adorable", "sentiment": "positive", "score": 0.9971, "wordcloud": "/static/wordclouds/1747791433940607394-wordcloud.png", "article_url": "https://timesofmalta.com/article/aww-cute-new-london-show-explores-world-adorable.1079958"}, {"title": "Three fined over 2016 death of 19-year-old construction worker", "sentiment": "negative", "score": -0.9847, "wordcloud": "/static/wordclouds/4756169257721317342-wordcloud.png", "article_url": "https://www.maltatoday.com.mt/news/court_and_police/128827/three_fined_over_2016_death_of_19yearold_construction_worker"}, {"title": "'Killed like an animal': Lassana Cisse's family is still waiting for justice", "sentiment": "negative", "score": -0.9946, "wordcloud": "/static/wordclouds/8235290392499695137-wordcloud.png", "article_url": "https://timesofmalta.com/article/killed-like-an-animal-lassana-cisses-family-still-waiting-for-justice.862734"}, {"title": "Poland: Three children among 19 people injured after car hits crowd at tram stop", "sentiment": "negative", "score": -0.9776, "wordcloud": "/static/wordclouds/-3279835557552171184-wordcloud.png", "article_url": "https://news.sky.com/story/poland-three-children-among-19-people-injured-after-car-hits-crowd-at-tram-stop-13084656"}]
+[
+  {
+    "title": "Aww, cute: new London show explores the world of the adorable",
+    "sentiment": "positive",
+    "score": 0.9971,
+    "wordcloud": "/static/wordclouds/1747791433940607394-wordcloud.png",
+    "article_url": "https://timesofmalta.com/article/aww-cute-new-london-show-explores-world-adorable.1079958"
+  },
+  {
+    "title": "Three fined over 2016 death of 19-year-old construction worker",
+    "sentiment": "negative",
+    "score": -0.9847,
+    "wordcloud": "/static/wordclouds/4756169257721317342-wordcloud.png",
+    "article_url": "https://www.maltatoday.com.mt/news/court_and_police/128827/three_fined_over_2016_death_of_19yearold_construction_worker"
+  },
+  {
+    "title": "'Killed like an animal': Lassana Cisse's family is still waiting for justice",
+    "sentiment": "negative",
+    "score": -0.9946,
+    "wordcloud": "/static/wordclouds/8235290392499695137-wordcloud.png",
+    "article_url": "https://timesofmalta.com/article/killed-like-an-animal-lassana-cisses-family-still-waiting-for-justice.862734"
+  },
+  {
+    "title": "Poland: Three children among 19 people injured after car hits crowd at tram stop",
+    "sentiment": "negative",
+    "score": -0.9776,
+    "wordcloud": "/static/wordclouds/-3279835557552171184-wordcloud.png",
+    "article_url": "https://news.sky.com/story/poland-three-children-among-19-people-injured-after-car-hits-crowd-at-tram-stop-13084656"
+  },
+  {
+    "title": "Son of boating hit and run victim says Jason Azzopardi 'reopened wounds'",
+    "sentiment": "negative",
+    "score": -0.9564,
+    "wordcloud": "/static/wordclouds/1096932606875657400-wordcloud.png",
+    "article_url": "https://timesofmalta.com/article/son-boating-hit-run-victim-says-jason-azzopardi-reopened-wounds.1092138"
+  },
+  {
+    "title": "Animal Well could be the best indie game of the year",
+    "sentiment": "positive",
+    "score": 0.9964,
+    "wordcloud": "/static/wordclouds/-146904213566373497-wordcloud.png",
+    "article_url": "https://www.dlcompare.com/gaming-news/animal-well-could-be-the-best-indie-game-of-the-year-42617"
+  }
+]
