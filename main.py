@@ -25,6 +25,19 @@ def hello_world():
 @app.route("/analyze", methods=["POST"])
 def analyze():
     url = request.json["url"]
+    analysis = analyze_url(url)
+    
+    analysis_file_path = os.path.join("static", "analysis.json")
+    existing_analyses = get_analysis()
+    existing_analyses.append(analysis)
+
+    with open(analysis_file_path, "w") as f:
+        json.dump(existing_analyses, f)
+
+    return jsonify(analysis)
+
+
+def analyze_url(url):
     article = Article(url, config=config)
     try:
         article.download()
@@ -38,7 +51,6 @@ def analyze():
     sentiment = sid.polarity_scores(text)
     wordcloud_url = generate_wordcloud(text, title)
 
-    analysis_file_path = os.path.join("static", "analysis.json")
     analysis = {
         "title": title,
         "sentiment": (
@@ -52,13 +64,7 @@ def analyze():
     }
     print(analysis)
 
-    existing_analyses = get_analysis()
-    existing_analyses.append(analysis)
-
-    with open(analysis_file_path, "w") as f:
-        json.dump(existing_analyses, f)
-
-    return jsonify(analysis)
+    return analysis
 
 
 def get_analysis():

@@ -1,7 +1,7 @@
 import unittest
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from newspaper import Article
-from main import vectorize_text
+from main import vectorize_text, analyze_url
 
 
 class TestMain(unittest.TestCase):
@@ -55,6 +55,16 @@ class TestMain(unittest.TestCase):
         sentiment = sid.polarity_scores(text)
         self.assertLess(sentiment["compound"], 0)
 
+    # Results
+    # ---------------------------------------------------------------------------------------------------------------------
+    def test_analyze_produces_correct_result(self):
+        url = "https://www.dlcompare.com/gaming-news/animal-well-could-be-the-best-indie-game-of-the-year-42617"
+        analysis = analyze_url(url)
+        self.assertIn("title", analysis)
+        self.assertIn("sentiment", analysis)
+        self.assertIn("score", analysis)
+        self.assertIn("wordcloud", analysis)
+        self.assertIn("article_url", analysis)
 
 if __name__ == "__main__":
     unittest.main()
