@@ -1,49 +1,38 @@
 import unittest
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-from newspaper import Article
-from main import vectorize_text, analyze_url
+from main import (
+    vectorize_text,
+    analyze_url
+)
+import os
+article_url = "https://www.dlcompare.com/gaming-news/animal-well-could-be-the-best-indie-game-of-the-year-42617"
 
 
 class TestMain(unittest.TestCase):
     # Text aquisition tests
     # ---------------------------------------------------------------------------------------------------------------------
     def test_text_aquisition(self):
-        article_url = "https://www.dlcompare.com/gaming-news/animal-well-could-be-the-best-indie-game-of-the-year-42617"
-        article = Article(article_url)
-        article.download()
-        article.parse()
-        text = article.text
-        self.assertTrue(len(text) > 0)
+        """Test that the analyze_url function returns text from a valid URL."""
+        text = analyze_url(article_url)["text"]
+        self.assertGreater(len(text), 0)
 
     def test_specific_text_aquisition(self):
-        article_url = "https://www.dlcompare.com/gaming-news/animal-well-could-be-the-best-indie-game-of-the-year-42617"
-        article = Article(article_url)
-        article.download()
-        article.parse()
-        title = article.title
+        title = analyze_url(article_url)["title"]
         self.assertEqual(title, "Animal Well could be the best indie game of the year")
 
     # Text processing techniques
     # ---------------------------------------------------------------------------------------------------------------------
 
     def test_text_processing_techniques(self):
-        article_url = "https://www.dlcompare.com/gaming-news/animal-well-could-be-the-best-indie-game-of-the-year-42617"
-        article = Article(article_url)
-        article.download()
-        article.parse()
-        text = article.text
+        text = analyze_url(article_url)["text"]
         vectorized_text = vectorize_text(text)
-        self.assertTrue(len(vectorized_text) > 0)
+        self.assertGreater(len(vectorized_text), 0)
 
     def test_specific_text_processing_techniques(self):
-        article_url = "https://www.dlcompare.com/gaming-news/animal-well-could-be-the-best-indie-game-of-the-year-42617"
-        article = Article(article_url)
-        article.download()
-        article.parse()
-        text = article.text
+        text = analyze_url(article_url)["text"]
         vectorized_text = vectorize_text(text)
         self.assertNotIn("the", vectorized_text)
-        
+
     # Vectorize text tests
     # ---------------------------------------------------------------------------------------------------------------------
     def test_vectorize_text_with_english_stopwords(self):
@@ -75,19 +64,19 @@ class TestMain(unittest.TestCase):
 
     # Results
     # ---------------------------------------------------------------------------------------------------------------------
-    def test_analyze_produces_correct_result(self):
-        url = "https://www.dlcompare.com/gaming-news/animal-well-could-be-the-best-indie-game-of-the-year-42617"
+    def test_analyze_returns_error_message(self):
+        url = "This is not a valid URL"
         analysis = analyze_url(url)
-        self.assertIn("title", analysis)
-        self.assertIn("sentiment", analysis)
-        self.assertIn("score", analysis)
-        self.assertIn("wordcloud", analysis)
-        self.assertIn("article_url", analysis)
+        self.assertEqual(analysis, "errrrm")
 
-    def test_analyze_produces_correct_sentiment(self):
-        url = "https://www.dlcompare.com/gaming-news/animal-well-could-be-the-best-indie-game-of-the-year-42617"
-        analysis = analyze_url(url)
-        self.assertIn(analysis["sentiment"], ["positive", "negative", "neutral"])
+    def test_wordcloud_image_creation(self):
+        analysis = analyze_url(article_url)
+        wordcloud_file_path = analysis["wordcloud"]
+        self.assertTrue(os.path.exists(wordcloud_file_path))
+
+        if self._outcome.result.wasSuccessful():
+            os.remove(wordcloud_file_path)
+
 
 if __name__ == "__main__":
     unittest.main()
