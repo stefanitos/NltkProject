@@ -74,8 +74,10 @@ class TestMain(unittest.TestCase):
         wordcloud_file_path = analysis["wordcloud"]
         self.assertTrue(os.path.exists(wordcloud_file_path))
 
-        if self._outcome.result.wasSuccessful():
+        try:
             os.remove(wordcloud_file_path)
+        except:
+            pass
 
 
 if __name__ == "__main__":
